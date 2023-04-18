@@ -1,0 +1,19 @@
+FROM composer:lts as composer
+
+WORKDIR /source
+
+COPY . .
+
+RUN composer install
+
+FROM joseluisq/php-fpm:8.2 as production
+
+WORKDIR /var/www/html
+
+ADD . .
+RUN chown -R www-data:www-data /var/www/html
+COPY ./php/conf.d /usr/local/etc/php/conf.d
+
+COPY --from=composer /source/vendor ./vendor
+
+CMD ["/bin/sh","./docker/migration.sh"]
