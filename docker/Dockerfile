@@ -12,11 +12,9 @@ WORKDIR /source
 
 COPY --from=composer /source/vendor ./vendor
 COPY --from=composer /source/bootstrap ./bootstrap
+COPY --from=composer /source .
 
-COPY package.* ./
 RUN npm install
-
-COPY . .
 RUN npm run build
 
 FROM joseluisq/php-fpm:8.2 as production
