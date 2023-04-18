@@ -1,0 +1,54 @@
+version: "3.7"
+
+services:
+  laravel:
+    build:
+      dockerfile: ./docker/Dockerfile
+    networks:
+        - laravel-network
+    env_file: .env.prod
+    platform: "linux/amd64"
+    depends_on:
+      - mysql_prod
+      - migration
+      - redis_prod
+  migration:
+    build:
+      dockerfile: ./docker/Dockerfile.migration
+    env_file: .env.prod
+    platform: "linux/amd64"
+    depends_on:
+      - mysql_prod
+    networks:
+      - laravel-network
+  mysql_prod:
+    image: mysql:8.0
+    env_file: .env.prod
+    networks:
+      - laravel-network
+    volumes:
+      - laravel-mysql:/var/lib/mysql
+  redis_prod:
+    image: 'bitnami/redis:latest'
+    env_file: .env.prod
+    volumes:
+      - laravel-redis:/opt/bitnami/redis/mounted-etc/users.acl
+    networks:
+      - laravel-network
+  nginx:
+    build:
+      dockerfile: ./docker/Dockerfile.nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+        - laravel-network
+    depends_on:
+      - laravel
+
+networks:
+  laravel-network:
+
+volumes:
+  laravel-mysql:
+  laravel-redis:
