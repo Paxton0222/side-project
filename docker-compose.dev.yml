@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  mysql_dev:
+    image: mysql:8.0
+    env_file: .env
+    volumes:
+      - laravel-mysql-dev:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  redis_dev:
+    image: 'bitnami/redis:latest'
+    env_file: .env
+    volumes:
+      - laravel-redis-dev:/opt/bitnami/redis/mounted-etc/users.acl
+    ports:
+      - "6379:6379"
+  mailhog:
+    image: mailhog/mailhog:latest
+    platform: 'linux/amd64'
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - "1025:1025" # smtp server
+      - "8025:8025" # web ui
+
+volumes:
+  laravel-mysql-dev:
+  laravel-redis-dev:
