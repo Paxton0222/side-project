@@ -11,6 +11,7 @@ services:
     depends_on:
       - mysql_prod
       - migration
+      - redis
   migration:
     build:
       dockerfile: ./docker/Dockerfile.migration
@@ -29,6 +30,13 @@ services:
       - laravel-mysql:/var/lib/mysql
     ports:
       - "3306:3306"
+  redis:
+    image: 'bitnami/redis:latest'
+    env_file: .env.prod
+    volumes:
+      - laravel-redis:/opt/bitnami/redis/mounted-etc/users.acl
+    networks:
+      - laravel-network
   nginx:
     build:
       dockerfile: ./docker/Dockerfile.nginx
@@ -45,3 +53,4 @@ networks:
 
 volumes:
   laravel-mysql:
+  laravel-redis:
