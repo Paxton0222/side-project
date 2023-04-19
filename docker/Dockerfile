@@ -10,8 +10,6 @@ FROM node:lts-slim as node
 
 WORKDIR /source
 
-COPY --from=composer /source/vendor ./vendor
-COPY --from=composer /source/bootstrap ./bootstrap
 COPY --from=composer /source .
 
 RUN npm install
