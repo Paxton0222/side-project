@@ -29,18 +29,19 @@ class wait_db_alive extends Command
         $i = 1;
         $ret = 1;
         while ($i <= 10) {
-            echo 'connecting to host:' . config('database.connections.' . config('database.default') . '.host') . ' try ' . $i . '..';
+            echo 'connecting to host:'.config('database.connections.'.config('database.default').'.host').' try '.$i.'..';
             try {
                 DB::connection()->getPdo();
-                echo 'ok' . PHP_EOL;
+                echo 'ok'.PHP_EOL;
                 $ret = 0;
                 break;
             } catch (\Exception $e) {
-                echo 'error:' . $e->getMessage() . PHP_EOL;
+                echo 'error:'.$e->getMessage().PHP_EOL;
                 sleep(1);
                 $i++;
             }
         }
+
         return $ret;
     }
 }
