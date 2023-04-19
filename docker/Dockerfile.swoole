@@ -1,0 +1,29 @@
+FROM composer:lts as composer
+
+WORKDIR /source
+
+COPY . .
+
+RUN composer install -n -o --no-dev --optimize-autoloader
+
+FROM node:lts-slim as node
+
+WORKDIR /source
+
+COPY --from=composer /source .
+
+RUN npm install
+RUN npm run build
+
+FROM phpswoole/swoole:php8.2-alpine as production
+
+WORKDIR /var/www/html
+
+ADD . .
+RUN chown -R www-data:www-data /var/www/html
+
+COPY --from=composer /source/vendor ./vendor
+COPY --from=node /source/bootstrap ./bootstrap
+COPY --from=node /source/public ./public
+
+CMD ["php","artisan","octane:start","--server=swoole","--host=0.0.0.0","--port=9000"]
