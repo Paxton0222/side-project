@@ -12,6 +12,8 @@ services:
       - mysql_prod
       - migration
       - redis_prod
+    volumes:
+      - laravel-fpm-public:/var/www/html/public
   laravel_swoole:
     build:
       dockerfile: ./docker/Dockerfile.swoole
@@ -58,6 +60,8 @@ services:
         - laravel-network
     depends_on:
       - laravel
+    volumes:
+      - laravel-fpm-public:/var/www/html/public
   nginx_swoole:
     build:
       dockerfile: ./docker/Dockerfile.nginx.swoole
@@ -74,3 +78,4 @@ networks:
 volumes:
   laravel-mysql:
   laravel-redis:
+  laravel-fpm-public:
