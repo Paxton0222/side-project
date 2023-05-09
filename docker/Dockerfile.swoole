@@ -26,4 +26,6 @@ COPY --from=composer /source/vendor ./vendor
 COPY --from=node /source/bootstrap ./bootstrap
 COPY --from=node /source/public ./public
 
+RUN rm -frv /var/www/html/public/hot
+
 CMD ["php","artisan","octane:start","--server=swoole","--host=0.0.0.0","--port=9000"]

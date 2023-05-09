@@ -2,6 +2,7 @@ version: "3.7"
 
 services:
   laravel:
+    image: registry.paxton0222.com/paxton0222/laravel-fpm-csr-prod
     build:
       dockerfile: ./docker/Dockerfile
     networks:
@@ -15,6 +16,7 @@ services:
     volumes:
       - laravel-fpm-public:/var/www/html/public
   laravel_swoole:
+    image: registry.paxton0222.com/paxton0222/laravel-swoole-csr-prod
     build:
       dockerfile: ./docker/Dockerfile.swoole
     networks:
@@ -28,6 +30,7 @@ services:
     # ports:
       # - "9000:9000"
   migration:
+    image: registry.paxton0222.com/paxton0222/laravel-migration-prod
     build:
       dockerfile: ./docker/Dockerfile.migration
     env_file: .env.prod
@@ -51,6 +54,7 @@ services:
     networks:
       - laravel-network
   nginx:
+    image: registry.paxton0222.com/paxton0222/laravel-fpm-csr-nginx-prod
     build:
       dockerfile: ./docker/Dockerfile.nginx
     ports:
@@ -63,6 +67,7 @@ services:
     volumes:
       - laravel-fpm-public:/var/www/html/public
   nginx_swoole:
+    image: registry.paxton0222.com/paxton0222/laravel-swoole-csr-nginx-prod
     build:
       dockerfile: ./docker/Dockerfile.nginx.swoole
     ports:

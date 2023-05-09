@@ -26,3 +26,5 @@ COPY ./php/conf.d /usr/local/etc/php/conf.d
 COPY --from=composer /source/vendor ./vendor
 COPY --from=node /source/bootstrap ./bootstrap
 COPY --from=node /source/public ./public
+
+RUN rm -frv /var/www/html/public/hot
